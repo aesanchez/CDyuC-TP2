@@ -9,7 +9,7 @@
 #ifdef __cplusplus
 extern "C"
 #endif
-void MCU_init(void); /* Device initialization function declaration */
+void MCU_init(void);
 extern unsigned char stringOut[16];
 void main(void) {	
 	char strAux[9];
@@ -20,7 +20,6 @@ void main(void) {
 	PTBDD=0x0F;
 	PTBPE=0xF0;	
 	
-	//limpio posible basura
 	LCD_pos_xy(0,0);
 	LCD_write_string("                ");
 	LCD_pos_xy(0,1);

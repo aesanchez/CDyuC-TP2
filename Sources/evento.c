@@ -11,6 +11,6 @@ unsigned char pop_tecla(void){
 	return tecla;
 }
 
-unsigned char cola_vacia(void){
+unsigned char tecla_vacia(void){
 	return vacio;
 }

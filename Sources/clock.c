@@ -4,7 +4,6 @@ unsigned char HH=23;
 unsigned char MM=59;
 unsigned char SS=55;
 
-//cada un segundo
 void tick(void){
 		SS++;
 		if(SS==60){
