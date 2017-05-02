@@ -1,4 +1,5 @@
 #include <mc9s08sh8.h>
+#include "evento.h"
 
 const unsigned char NO_PRESIONADO=42;//significado de la vida, que la vida no se presiona
 const unsigned char TECLA_VACIA='<';
@@ -6,7 +7,7 @@ void columna_presionada(unsigned char *);
 void fila_presionada(unsigned char *,unsigned char);
 const char map[4][4]={{'1','2','3','A'},{'4','5','6','B'},{'7','8','9','C'},{'*','0','#','D'}};
 
-char teclUlt=TECLA_VACIA;
+char teclaUlt=TECLA_VACIA;
 void comprobar_tecla(void){
 	unsigned char filaPresionada;
 	unsigned char columnaPresionada;

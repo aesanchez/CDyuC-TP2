@@ -3,6 +3,7 @@
 #include "lcd.h"
 #include "clock.h"
 #include "teclado.h"
+#include "evento.h"
 
 
 #ifdef __cplusplus
@@ -27,7 +28,7 @@ void main(void) {
 		get_time_as_str(strAux);
 		LCD_write_string(strAux);
 		LCD_pos_xy(0,1);
-		if(!cola_vacia()){
+		if(cola_vacia()==0){
 			ult = pop_tecla();
 		}
 		LCD_write_char(ult);		
