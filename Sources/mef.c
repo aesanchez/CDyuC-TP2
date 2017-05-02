@@ -8,6 +8,7 @@ state estadoActual;
 
 unsigned char is_num(unsigned char);
 unsigned char construir_num(unsigned char,unsigned char);
+unsigned char obtener_numero(unsigned char);
 void fCERRADO(void);
 void fABIERTO(void);
 void fDENEGADO(void);
@@ -28,11 +29,12 @@ void init_MEF(void){
 void update_MEF(void){
 	(*MEF[estadoActual])();
 }
+
 unsigned char stringOut[16];
 void fCERRADO(void){
 	stringOut[0]='C';
 	stringOut[1]='\0';
-	if(cola_vacia()==0){
+	if(tecla_vacia()==0){
 		key=pop_tecla();	
 	}
 	switch(key){
@@ -59,39 +61,48 @@ void fCERRADO(void){
 		break;
 	}
 }
-unsigned char is_num(unsigned char aux){
-	return aux-'0' < 10 ? 1 : 0;
+
+unsigned char valido(unsigned char n, unsigned char max){
+	return (n-'0' <= max)&&(n-'0'>=0) ? 1 : 0;
 }
 
 unsigned char construir_num(unsigned char pro, unsigned char sdo) {
 	return (((pro-'0')*10)+(sdo-'0'));
 }
-void fABIERTO(void){
-	
+
+unsigned char i, pro, sdo;
+// return:
+// 		1: no hay tecla o no es valido
+//		0: todo piola
+unsigned char obtener_numero(unsigned char max){
+	if(tecla_vacia()==1)return 1;
+	key=pop_tecla();
+	if(valido(key, max)==0)return 1;
+	i++;
+	return 0;
+}
+
+void fABIERTO(void){	
 }
 void fDENEGADO(void){
-	
 }
-unsigned char i, pro, sdo;
+
 void fCAMBIAR_HH(void){
 	stringOut[0]='H';
 	if(i<2){
-		if(cola_vacia()==0){
-			key = pop_tecla();
-			if(is_num(key)==0)return;
-				if(i==0)
-					pro=key;
-				else
-					sdo=key;
-			i++;
+		// return si es el primer numero y el numero no es valido
+		if((i==0)&&(obtener_numero(2)==0)){
+			pro=key;
+			return;
 		}
-		
+		if ((pro=='2') && (obtener_numero(4)==0))
+			sdo=key;
+		else if ((pro!='2') && obtener_numero(9)==0)
+			sdo=key;
+	} else if(key!='A'){
+		if(tecla_vacia()==0)key=pop_tecla();
 	}
-	if((i==2)&&(key!='A')){
-		if(cola_vacia()==0){
-			key = pop_tecla();
-		}
-	}
+	
 	if((i==2)&&(key=='A')){
 		cambiar_hora(construir_num(pro,sdo), IGNORE_MM, IGNORE_SS);
 		estadoActual=CERRADO;
@@ -103,21 +114,13 @@ void fCAMBIAR_HH(void){
 void fCAMBIAR_MM(void){
 	stringOut[0]='M';
 	if(i<2){
-		if(cola_vacia()==0){
-			key = pop_tecla();
-			if(is_num(key)==0)return;
-				if(i==0)
-					pro=key;
-				else
-					sdo=key;
-			i++;
+		if((i==0)&&(obtener_numero(5)==0)){
+			pro=key;
+			return;
 		}
-		
-	}
-	if((i==2)&&(key!='B')){
-		if(cola_vacia()==0){
-			key = pop_tecla();
-		}
+		if(obtener_numero(9)==0)sdo=key;
+	} else if(key!='B'){
+		if(tecla_vacia()==0)key=pop_tecla();
 	}
 	if((i==2)&&(key=='B')){
 		cambiar_hora(IGNORE_HH, construir_num(pro,sdo), IGNORE_SS);
@@ -126,24 +129,17 @@ void fCAMBIAR_MM(void){
 		i=0;
 	}
 }
+
 void fCAMBIAR_SS(void){
 	stringOut[0]='S';
 	if(i<2){
-		if(cola_vacia()==0){
-			key = pop_tecla();
-			if(is_num(key)==0)return;
-				if(i==0)
-					pro=key;
-				else
-					sdo=key;
-			i++;
+		if((i==0)&&(obtener_numero(5)==0)){
+			pro=key;
+			return;
 		}
-		
-	}
-	if((i==2)&&(key!='C')){
-		if(cola_vacia()==0){
-			key = pop_tecla();
-		}
+		if(obtener_numero(9)==0)sdo=key;
+	} else if(key!='C'){
+		if(tecla_vacia()==0)key=pop_tecla();
 	}
 	if((i==2)&&(key=='C')){
 		cambiar_hora(IGNORE_HH, IGNORE_MM, construir_num(pro,sdo));
@@ -152,6 +148,7 @@ void fCAMBIAR_SS(void){
 		i=0;
 	}	
 }
+
 void fCAMBIAR_C(void){
 	
 }
