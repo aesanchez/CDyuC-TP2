@@ -1,0 +1,11 @@
+Lib/
+MC9S08SH8/
+Project_Settings/
+DeviceInitialization.pe
+rseHostSettingsCache.xml
+.project
+.cproject
+.DeviceInitialization.g_x
+.DeviceInitialization.g_c
+.cwGeneratedFileSetLog 
+.settings/
