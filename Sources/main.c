@@ -27,7 +27,9 @@ void main(void) {
 		get_time_as_str(strAux);
 		LCD_write_string(strAux);
 		LCD_pos_xy(0,1);
-		ultimo_char(&ult);
+		if(!cola_vacia()){
+			ult = pop_tecla();
+		}
 		LCD_write_char(ult);		
 	}
 }

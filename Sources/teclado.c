@@ -1,24 +1,27 @@
 #include <mc9s08sh8.h>
 
-const unsigned char ERROR=42;//significado de la vida, que la vida es un error
+const unsigned char NO_PRESIONADO=42;//significado de la vida, que la vida no se presiona
+const unsigned char TECLA_VACIA='<';
 void columna_presionada(unsigned char *);
 void fila_presionada(unsigned char *,unsigned char);
 const char map[4][4]={{'1','2','3','A'},{'4','5','6','B'},{'7','8','9','C'},{'*','0','#','D'}};
 
-//TODO(agustin) esto no corresponde
-char ult='~';
+char teclUlt=TECLA_VACIA;
 void comprobar_tecla(void){
-	//hay alguna tecla presionada?
 	unsigned char filaPresionada;
 	unsigned char columnaPresionada;
 	columna_presionada(&columnaPresionada);
-	if(columnaPresionada==ERROR)return;	
+	if(columnaPresionada==NO_PRESIONADO) {
+		if(teclaUlt == TECLA_VACIA)return;
+		push_tecla(teclaUlt);
+		teclaUlt = TECLA_VACIA;
+		return;
+	}	
 	fila_presionada(&filaPresionada,columnaPresionada);
-	if(filaPresionada==ERROR)return;	
-	ult=map[filaPresionada][columnaPresionada];
-}
-void ultimo_char(char * u){
-	*u = ult;
+	if(filaPresionada==NO_PRESIONADO){
+		return;
+	}	
+	teclaUlt=map[filaPresionada][columnaPresionada];
 }
 
 void fila_presionada(unsigned char * fp,unsigned char cp){
@@ -40,14 +43,14 @@ void fila_presionada(unsigned char * fp,unsigned char cp){
 			break;
 		}
 		columna_presionada(&cp);
-		if(cp!=ERROR){
+		if(cp!=NO_PRESIONADO){
 			*fp=filaAct;
 			PTBD=0x00;
 			return;
 		}
 		filaAct++;
 	}
-	*fp=ERROR;	
+	*fp=NO_PRESIONADO;	
 }
 
 void columna_presionada(unsigned char * cp){
@@ -67,5 +70,5 @@ void columna_presionada(unsigned char * cp){
 		*cp=0;
 		return;
 	}
-	*cp=ERROR;
+	*cp=NO_PRESIONADO;
 }
