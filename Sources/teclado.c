@@ -1,32 +1,42 @@
-const unsigned char ERROR=42;//significado de la vida, que la vida es un error
+#include <mc9s08sh8.h>
 
+const unsigned char ERROR=42;//significado de la vida, que la vida es un error
+void columna_presionada(unsigned char *);
+void fila_presionada(unsigned char *,unsigned char);
+const char map[4][4]={{'1','2','3','A'},{'4','5','6','B'},{'7','8','9','C'},{'*','0','#','D'}};
+
+//TODO(agustin) esto no corresponde
+char ult='ç';
 void comprobar_tecla(void){
 	//hay alguna tecla presionada?
+	unsigned char filaPresionada;
 	unsigned char columnaPresionada;
 	columna_presionada(&columnaPresionada);
-	if(columnaPresionada==ERROR) return;
-	unsigned char filaPresionada;
+	if(columnaPresionada==ERROR){ return;}	
 	fila_presionada(&filaPresionada,columnaPresionada);
-	if(filaPresionada==ERROR)return;
-	
+	if(filaPresionada==ERROR)return;	
+	ult=map[filaPresionada][columnaPresionada];
+}
+char ultimo_char(void){
+	return ult;
 }
 
 void fila_presionada(unsigned char * fp,unsigned char cp){
 	unsigned char filaAct=0;
 	while(filaAct<4){
-		PTBD0=1;PTBD1=1;PTBD2=1;PTBD3=1;
+		PTBD_PTBD0=1;PTBD_PTBD1=1;PTBD_PTBD2=1;PTBD_PTBD3=1;
 		switch(filaAct){
 		case 0:
-			PTBD0=0;
+			PTBD_PTBD0=0;
 			break;
 		case 1:
-			PTBD1=0;
+			PTBD_PTBD1=0;
 			break;
 		case 2:
-			PTBD2=0;
+			PTBD_PTBD2=0;
 			break;
 		case 3:
-			PTBD3=0;
+			PTBD_PTBD3=0;
 			break;
 		}
 		columna_presionada(&cp);
@@ -40,19 +50,19 @@ void fila_presionada(unsigned char * fp,unsigned char cp){
 }
 
 void columna_presionada(unsigned char * cp){
-	if(PTBD7==0){
+	if(PTBD_PTBD7==0){
 		*cp=3;
 		return;
 	}
-	if(PTBD6==0){
+	if(PTBD_PTBD6==0){
 		*cp=2;
 		return;
 	}
-	if(PTBD5==0){
+	if(PTBD_PTBD5==0){
 		*cp=1;
 		return;
 	}
-	if(PTBD4==0){
+	if(PTBD_PTBD4==0){
 		*cp=0;
 		return;
 	}

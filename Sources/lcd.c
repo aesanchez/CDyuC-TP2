@@ -1,17 +1,3 @@
-/*
- * lcd.c
- *
- *  Created on: 30/07/2013
- *      Author: pc2
- */
-
-/**************************************************************************
-//* Basic Character LCD functions
-//* By Fábio Pereira
-//* 01/15/08
-//**************************************************************************
- * 
- */
 #include "lcd.h"
 #include "derivative.h" /* include peripheral declarations */
 

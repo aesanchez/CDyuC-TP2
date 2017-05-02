@@ -2,6 +2,7 @@
 #include "derivative.h" /* include peripheral declarations */
 #include "lcd.h"
 #include "clock.h"
+#include "teclado.h"
 
 
 #ifdef __cplusplus
@@ -24,7 +25,9 @@ void main(void) {
 	for(;;) {
 		LCD_pos_xy(4,0);
 		get_time_as_str(strAux);
-		LCD_write_string(strAux);	  
+		LCD_write_string(strAux);
+		LCD_pos_xy(0,1);
+		LCD_write_char(ultimo_char());		
 	}
 }
 
