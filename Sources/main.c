@@ -10,7 +10,7 @@
 extern "C"
 #endif
 void MCU_init(void); /* Device initialization function declaration */
-
+extern unsigned char stringOut[16];
 void main(void) {	
 	char strAux[9];
 	char ult='~';
@@ -23,15 +23,15 @@ void main(void) {
 	//limpio posible basura
 	LCD_pos_xy(0,0);
 	LCD_write_string("                ");
+	LCD_pos_xy(0,1);
+	LCD_write_string("                ");
 	for(;;) {
 		LCD_pos_xy(4,0);
 		get_time_as_str(strAux);
 		LCD_write_string(strAux);
+		
 		LCD_pos_xy(0,1);
-		if(cola_vacia()==0){
-			ult = pop_tecla();
-		}
-		LCD_write_char(ult);		
+		LCD_write_string(stringOut);
 	}
 }
 
