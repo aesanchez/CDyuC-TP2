@@ -1,6 +1,6 @@
 #include "clock.h"
-#include "lcd.h"
 #include "evento.h"
+#include "pantalla_lcd.h"
 typedef enum{CERRADO,ABIERTO,DENEGADO,CAMBIAR_HH,CAMBIAR_MM,CAMBIAR_SS,CAMBIAR_C} state;
 state estadoActual;
 
@@ -29,11 +29,11 @@ void init_MEF(void){
 void update_MEF(void){
 	(*MEF[estadoActual])();
 }
-
-unsigned char stringOut[16];
+char hhmmss[9];
 void fCERRADO(void){
-	stringOut[0]='C';
-	stringOut[1]='\0';
+	get_time_as_str(hhmmss);
+	push_string(hhmmss,0);
+	push_string("CERRADO",1);
 	if(tecla_vacia()==0){
 		key=pop_tecla();	
 	}
@@ -88,7 +88,6 @@ void fDENEGADO(void){
 }
 
 void fCAMBIAR_HH(void){
-	stringOut[0]='H';
 	if(i<2){
 		// return si es el primer numero y el numero no es valido
 		if((i==0)&&(obtener_numero(2)==0)){
@@ -112,7 +111,6 @@ void fCAMBIAR_HH(void){
 }
 
 void fCAMBIAR_MM(void){
-	stringOut[0]='M';
 	if(i<2){
 		if((i==0)&&(obtener_numero(5)==0)){
 			pro=key;
@@ -131,7 +129,6 @@ void fCAMBIAR_MM(void){
 }
 
 void fCAMBIAR_SS(void){
-	stringOut[0]='S';
 	if(i<2){
 		if((i==0)&&(obtener_numero(5)==0)){
 			pro=key;
