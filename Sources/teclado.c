@@ -6,25 +6,25 @@ void fila_presionada(unsigned char *,unsigned char);
 const char map[4][4]={{'1','2','3','A'},{'4','5','6','B'},{'7','8','9','C'},{'*','0','#','D'}};
 
 //TODO(agustin) esto no corresponde
-char ult='ç';
+char ult='~';
 void comprobar_tecla(void){
 	//hay alguna tecla presionada?
 	unsigned char filaPresionada;
 	unsigned char columnaPresionada;
 	columna_presionada(&columnaPresionada);
-	if(columnaPresionada==ERROR){ return;}	
+	if(columnaPresionada==ERROR)return;	
 	fila_presionada(&filaPresionada,columnaPresionada);
 	if(filaPresionada==ERROR)return;	
 	ult=map[filaPresionada][columnaPresionada];
 }
-char ultimo_char(void){
-	return ult;
+void ultimo_char(char * u){
+	*u = ult;
 }
 
 void fila_presionada(unsigned char * fp,unsigned char cp){
 	unsigned char filaAct=0;
 	while(filaAct<4){
-		PTBD_PTBD0=1;PTBD_PTBD1=1;PTBD_PTBD2=1;PTBD_PTBD3=1;
+		PTBD=0x0F;
 		switch(filaAct){
 		case 0:
 			PTBD_PTBD0=0;
@@ -40,8 +40,9 @@ void fila_presionada(unsigned char * fp,unsigned char cp){
 			break;
 		}
 		columna_presionada(&cp);
-		if(cp!=ERROR){//encontre la fila
+		if(cp!=ERROR){
 			*fp=filaAct;
+			PTBD=0x00;
 			return;
 		}
 		filaAct++;

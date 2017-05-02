@@ -9,7 +9,7 @@
 **     Processor : MC9S08SH8CPJ
 **     Version   : Component 01.008, Driver 01.08, CPU db: 3.00.066
 **     Datasheet : MC9S08SH8 Rev. 3 6/2008
-**     Date/Time : 2017-04-28, 18:25, # CodeGen: 1
+**     Date/Time : 2017-05-02, 05:22, # CodeGen: 3
 **     Abstract  :
 **         This module contains device initialization code 
 **         for selected on-chip peripherals.
@@ -27,7 +27,6 @@
 
 #include <mc9s08sh8.h>                 /* I/O map for MC9S08SH8CPJ */
 #include "MCUinit.h"
-#include "teclado.h"
 
 /* Standard ANSI C types */
 #ifndef int8_t
