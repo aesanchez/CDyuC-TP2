@@ -3,11 +3,9 @@
 unsigned char HH=23;
 unsigned char MM=59;
 unsigned char SS=55;
-const unsigned char escaler=10;
-unsigned char calls=0;
+
 //cada un segundo
 void tick(void){
-	if(calls++==escaler){
 		SS++;
 		if(SS==60){
 			SS=0;
@@ -20,8 +18,6 @@ void tick(void){
 				}
 			}
 		}
-		calls=0;
-	}
 }
 
 void get_time_as_str(char str[]){
@@ -36,6 +32,8 @@ void get_time_as_str(char str[]){
 	str[8]='\0';
 }
 
-
-
-
+void cambiar_hora(unsigned char hh, unsigned char mm, unsigned char ss){
+	if(hh<IGNORE_HH) HH=hh;
+	if(mm<IGNORE_MM) MM=mm;
+	if(ss<IGNORE_SS) SS=ss;
+}
