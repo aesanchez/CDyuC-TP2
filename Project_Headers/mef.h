@@ -1,7 +1,7 @@
 #ifndef MEF_H_
 #define MEF_H_
 
-void init_MEF(void);
-void update_MEF(void);
+void MEF_init(void);
+void MEF_update(void);
 
 #endif /* MEF_H_ */

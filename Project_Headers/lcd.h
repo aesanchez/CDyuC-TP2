@@ -1,10 +1,3 @@
-/*
- * lcd.h
- *
- *  Created on: 30/07/2013
- *      Author: pc2
- */
-
 #ifndef LCD_H_
 #define LCD_H_
 
