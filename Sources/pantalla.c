@@ -1,12 +1,13 @@
 #include "pantalla.h"
 #include "lcd.h"
+#include <string.h>
 
 char pantalla[2][STR_LEN + 1] = { { "                " },
 		{ "                " } };
 
 
 void setear_string(char str[], char fila) {
-	char length = sizeof(str) - 1;
+	char length = strlen(str);
 	char offset = (STR_LEN - length) / 2;
 	char i;
 	//centra el string y completa la linea con espacios

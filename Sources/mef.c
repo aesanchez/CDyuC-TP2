@@ -23,6 +23,8 @@ void fCAMBIAR_C(void);
 void (*MEF[])(void) = { fCERRADO, fABIERTO, fDENEGADO, fCAMBIAR_HH,
 		fCAMBIAR_MM, fCAMBIAR_SS, fCAMBIAR_C };
 char key;
+char claveActual[5]="1234";
+char claveN[];
 
 void MEF_init(void) {
 	key = CASO_NULO;
@@ -61,8 +63,11 @@ void fCERRADO(void) {
 	case CASO_NULO:
 		break;
 	default:
-		//entra solo con algun con las teclas restantes (solo digitos)
-		// llamar a leer clave
+		//leer(claveN);
+		//if(claveActual==claveN)
+		//	estadoActual = ABIERTO;
+		//else
+		//	estadoActual = DENEGADO;
 		break;
 	}
 }
@@ -91,8 +96,10 @@ char obtener_numero( char max) {
 }
 
 void fABIERTO(void) {
+	setear_string("ABIERTO",1);
 }
 void fDENEGADO(void) {
+	setear_string("DENEGADO",1);
 }
 
 void fCAMBIAR_HH(void) {
@@ -162,4 +169,20 @@ void fCAMBIAR_SS(void) {
 void fCAMBIAR_C(void) {
 
 }
-
+//void leer(char *clave){
+//	int i = 0;
+//	if (i < 5) {
+//			if ((i == 0)) {
+//				clave[i] = pop_tecla();
+//			}
+//			if (i == 1)
+//				clave[i] = pop_tecla();
+//			if ((i == 2)) {
+//				clave[i] = pop_tecla();
+//						}
+//			if (i == 3)
+//				clave[i] = pop_tecla();
+//			if (i == 4)
+//				clave[i] = pop_tecla(); 
+//	}	
+//}

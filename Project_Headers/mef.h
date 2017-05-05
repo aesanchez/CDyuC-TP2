@@ -3,5 +3,6 @@
 
 void MEF_init(void);
 void MEF_update(void);
+//void leer(char *);
 
 #endif /* MEF_H_ */

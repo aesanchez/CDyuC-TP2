@@ -1,5 +1,4 @@
 #include "clock.h"
-
 char HH = 23;
 char MM = 59;
 char SS = 55;
