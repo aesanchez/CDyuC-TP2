@@ -20,6 +20,7 @@ void setear_string(char str[], char fila) {
 }
 void pantalla_init(void) {
 	LCD_init(DISPLAY_8X5 | _2_LINES, DISPLAY_ON | CURSOR_OFF);
+	pantalla_update();
 }
 void pantalla_update(void) {
 	LCD_pos_xy(0, 0);

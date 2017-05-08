@@ -9,7 +9,7 @@
 **     Processor : MC9S08SH8CPJ
 **     Version   : Component 01.008, Driver 01.08, CPU db: 3.00.066
 **     Datasheet : MC9S08SH8 Rev. 3 6/2008
-**     Date/Time : 2017-05-05, 15:13, # CodeGen: 2
+**     Date/Time : 2017-05-08, 07:44, # CodeGen: 1
 **     Abstract  :
 **         This module contains device initialization code 
 **         for selected on-chip peripherals.
@@ -54,6 +54,7 @@ typedef unsigned long int uint32_t;
 #include "clock.h"
 #include "teclado.h"
 #include "mef.h"
+#include "timeout.h"
 unsigned char contador=0;
 const unsigned char RESET_CONTADOR=10;
 /* End of user declarations and definitions */
@@ -107,10 +108,10 @@ void MCU_init(void)
   /* PTCDS: PTCDS3=0,PTCDS2=0,PTCDS1=0,PTCDS0=0 */
   PTCDS = 0x00U;                                      
   /* ### Init_RTC init code */
-  /* RTCMOD: RTCMOD=0x63 */
-  RTCMOD = 0x63U;                      /* Set modulo register */
-  /* RTCSC: RTIF=1,RTCLKS=0,RTIE=1,RTCPS=8 */
-  RTCSC = 0x98U;                       /* Configure RTC */
+  /* RTCMOD: RTCMOD=0 */
+  RTCMOD = 0x00U;                      /* Set modulo register */
+  /* RTCSC: RTIF=1,RTCLKS=0,RTIE=1,RTCPS=0x0D */
+  RTCSC = 0x9DU;                       /* Configure RTC */
   /* ### */
   /*lint -save  -e950 Disable MISRA rule (1.1) checking. */
   asm CLI;                             /* Enable interrupts */
@@ -135,10 +136,11 @@ __interrupt void isrVrtc(void)
 	if(++contador==RESET_CONTADOR){
 			tick();
 			contador=0;
-		}
-		comprobar_tecla();
-		MEF_update();
-		RTCSC_RTIF=1;
+	}
+	contar();
+	comprobar_tecla();
+	MEF_update();
+	RTCSC_RTIF=1;
 }
 /* end of isrVrtc */
 

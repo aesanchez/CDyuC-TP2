@@ -19,7 +19,6 @@ void fCAMBIAR_HH(void);
 void fCAMBIAR_MM(void);
 void fCAMBIAR_SS(void);
 void fCAMBIAR_C(void);
-//TODO: que impriman las cosas usando pantalla
 void (*MEF[])(void) = { fCERRADO, fABIERTO, fDENEGADO, fCAMBIAR_HH,
 		fCAMBIAR_MM, fCAMBIAR_SS, fCAMBIAR_C };
 char key;
