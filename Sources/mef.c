@@ -186,18 +186,16 @@ void fCAMBIAR_MM(void) {
 	setear_string("CAMBIANDO MIN", 1);
 	control_flagBlink();
 	blinkear(3);
-	if (i < 2) {
-		if ((i == 0) && (obtener_numero(5) == 0)) {
-			pro = key;
-			return;
-		}
-		if (obtener_numero(9) == 0)
-			sdo = key;
-	} else if (key != 'B') {
-		if (tecla_vacia() == 0)
-			key = pop_tecla();
+	if ((i == 0) && (obtener_numero(5) == 0)) {
+		pro = key;
+		return;
 	}
-	if ((i == 2) && (key == 'B')) {
+	if (obtener_numero(9) == 0) {
+		sdo = key;
+		flagDosTeclas = 1;
+	}
+	if ((flagDosTeclas == 1) && (key == 'B')) {
+		flagDosTeclas = 0;
 		cambiar_hora(IGNORE_HH, construir_num(pro, sdo), IGNORE_SS);
 		estadoActual = CERRADO;
 		key = CASO_NULO;
@@ -209,18 +207,16 @@ void fCAMBIAR_SS(void) {
 	setear_string("CAMBIANDO SEG", 1);
 	control_flagBlink();
 	blinkear(6);
-	if (i < 2) {
-		if ((i == 0) && (obtener_numero(5) == 0)) {
-			pro = key;
-			return;
-		}
-		if (obtener_numero(9) == 0)
-			sdo = key;
-	} else if (key != 'C') {
-		if (tecla_vacia() == 0)
-			key = pop_tecla();
+	if ((i == 0) && (obtener_numero(5) == 0)) {
+		pro = key;
+		return;
 	}
-	if ((i == 2) && (key == 'C')) {
+	if (obtener_numero(9) == 0) {
+		sdo = key;
+		flagDosTeclas = 1;
+	}
+	if ((flagDosTeclas == 1) && (key == 'C')) {
+		flagDosTeclas = 0;
 		cambiar_hora(IGNORE_HH, IGNORE_MM, construir_num(pro, sdo));
 		estadoActual = CERRADO;
 		key = CASO_NULO;
@@ -276,8 +272,8 @@ void fCLAVE_NUEVA(void) {
 	}
 	if (leer_clave() == 1) {
 		strcpy(claveActual, claveLeida);
-		key=CASO_NULO;
-		car=0;
+		key = CASO_NULO;
+		car = 0;
 		timeout_cerrar();
 		for (j = 0; j < 16; j++) {
 			asteriscos[j]=' ';
@@ -334,7 +330,7 @@ void fINGRESAR_CLAVE(void) {
 }
 
 char leer_clave(void) {
-	if(car==16){
+	if (car == 16) {
 		return 1;
 	}
 	if (tecla_vacia() == 0) {
@@ -342,7 +338,7 @@ char leer_clave(void) {
 		// pregunta si es numero y es menor que 9
 		timeout_reset();
 		if (key == 'D') {
-			claveLeida[car]='\0';
+			claveLeida[car] = '\0';
 			return 1;
 		}
 		if (valido(key, 9) == 1) {
