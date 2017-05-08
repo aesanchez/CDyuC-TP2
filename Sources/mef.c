@@ -12,7 +12,8 @@ typedef enum {
 	CAMBIAR_MM,
 	CAMBIAR_SS,
 	CAMBIAR_C,
-	INGRESAR_CLAVE
+	INGRESAR_CLAVE,
+	CLAVE_NUEVA
 } state;
 state estadoActual;
 
@@ -30,8 +31,9 @@ void fCAMBIAR_MM(void);
 void fCAMBIAR_SS(void);
 void fCAMBIAR_C(void);
 void fINGRESAR_CLAVE(void);
+void fCLAVE_NUEVA(void);
 void (*MEF[])(void) = { fCERRADO, fABIERTO, fDENEGADO, fCAMBIAR_HH,
-		fCAMBIAR_MM, fCAMBIAR_SS, fCAMBIAR_C, fINGRESAR_CLAVE };
+		fCAMBIAR_MM, fCAMBIAR_SS, fCAMBIAR_C, fINGRESAR_CLAVE, fCLAVE_NUEVA };
 
 char key;
 char claveLongitud = 4;
@@ -226,22 +228,76 @@ void fCAMBIAR_SS(void) {
 	}
 }
 
+char car = 0;
+char asteriscos[17] = "                ";
 void fCAMBIAR_C(void) {
+	char j;
+	setear_string("CLAVE ACTUAL:", 0);
+	timeout_empezar(30);
+	if (timeout_termino() == 1) {
+		estadoActual = DENEGADO;
+		for (j = 0; j < 16; j++) {
+			asteriscos[j]=' ';
+		}
+		claveLeida[car] = '\0';
+		car = 0;
+		return;
+	}
+	for (j = 0; j < car; j++) {
+		asteriscos[j]='*';
+	}
+	setear_string(asteriscos, 1);
+	if (leer_clave() == 1) {
+		for (j = 0; j < 16; j++) {
+			asteriscos[j]=' ';
+		}
+		claveLeida[car] = '\0';
+		car = 0;
+		if (igualdad_strings(claveLeida, claveActual) == 1) {
+			estadoActual = CLAVE_NUEVA;
+		} else {
+			estadoActual = DENEGADO;
+		}
+		key = CASO_NULO;
+	}
+}
+
+void fCLAVE_NUEVA(void) {
+	char j;
+	setear_string("CLAVE NUEVA:", 0);
+	timeout_empezar(30);
+	for (j = 0; j < car; j++) {
+		asteriscos[j]='*';
+	}
+	setear_string(asteriscos, 1);
+	if (timeout_termino() == 1) {
+		estadoActual = CERRADO;
+		return;
+	}
+	if (leer_clave() == 1) {
+		strcpy(claveActual, claveLeida);
+		key=CASO_NULO;
+		car=0;
+		timeout_cerrar();
+		for (j = 0; j < 16; j++) {
+			asteriscos[j]=' ';
+		}
+		estadoActual = CERRADO;
+		return;
+	}
 }
 
 char igualdad_strings(char clavel[], char clavea[]) {
 	char k;
 	if (strlen(clavel) != strlen(clavea))
 		return 0;
-	for (k = 0; k < claveLongitud; k++) {
+	for (k = 0; k < strlen(clavea); k++) {
 		if(clavel[k]!=clavea[k])
 		return 0;
 	}
 	return 1;
 }
 
-char car = 0;
-char asteriscos[17] = "                ";
 void fINGRESAR_CLAVE(void) {
 	char j;
 	timeout_empezar(30);
@@ -250,7 +306,6 @@ void fINGRESAR_CLAVE(void) {
 		for (j = 0; j < 16; j++) {
 			asteriscos[j]=' ';
 		}
-		claveLeida[car] = '\0';
 		car = 0;
 		return;
 	}
@@ -267,8 +322,8 @@ void fINGRESAR_CLAVE(void) {
 		for (j = 0; j < 16; j++) {
 			asteriscos[j]=' ';
 		}
-		claveLeida[car] = '\0';
 		car = 0;
+		timeout_cerrar();
 		if (igualdad_strings(claveLeida, claveActual) == 1) {
 			estadoActual = ABIERTO;
 		} else {
@@ -279,11 +334,15 @@ void fINGRESAR_CLAVE(void) {
 }
 
 char leer_clave(void) {
+	if(car==16){
+		return 1;
+	}
 	if (tecla_vacia() == 0) {
 		key = pop_tecla();
 		// pregunta si es numero y es menor que 9
 		timeout_reset();
 		if (key == 'D') {
+			claveLeida[car]='\0';
 			return 1;
 		}
 		if (valido(key, 9) == 1) {
