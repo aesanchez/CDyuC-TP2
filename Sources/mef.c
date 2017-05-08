@@ -1,6 +1,7 @@
 #include "clock.h"
 #include "eventotecla.h"
 #include "pantalla.h"
+#include "timeout.h"
 
 typedef enum {
 	CERRADO, ABIERTO, DENEGADO, CAMBIAR_HH, CAMBIAR_MM, CAMBIAR_SS, CAMBIAR_C
@@ -22,8 +23,9 @@ void fCAMBIAR_C(void);
 void (*MEF[])(void) = { fCERRADO, fABIERTO, fDENEGADO, fCAMBIAR_HH,
 		fCAMBIAR_MM, fCAMBIAR_SS, fCAMBIAR_C };
 char key;
-char claveActual[5]="1234";
+char claveActual[5] = "1234";
 char claveN[];
+char hhmmss[9];
 
 void MEF_init(void) {
 	key = CASO_NULO;
@@ -34,7 +36,6 @@ void MEF_update(void) {
 	(*MEF[estadoActual])();
 }
 
-char hhmmss[9];
 void fCERRADO(void) {
 	get_time_as_str(hhmmss);
 	setear_string(hhmmss, 0);
@@ -84,7 +85,7 @@ char i, pro, sdo;
 // return:
 // 		1: no hay tecla o no es valido
 //		0: todo piola
-char obtener_numero( char max) {
+char obtener_numero(char max) {
 	if (tecla_vacia() == 1)
 		return 1;
 	key = pop_tecla();
@@ -95,13 +96,34 @@ char obtener_numero( char max) {
 }
 
 void fABIERTO(void) {
-	setear_string("ABIERTO",1);
+	setear_string("ABIERTO", 1);
 }
 void fDENEGADO(void) {
-	setear_string("DENEGADO",1);
+	setear_string("DENEGADO", 1);
+}
+
+unsigned char flagBlink = 1;
+void control_flagBlink() {
+	timeout_empezar(5);
+	if (timeout_termino() == 1) {
+		flagBlink = flagBlink == 0 ? 1 : 0;
+	}
+}
+
+void blinkear(char offset) {
+	get_time_as_str(hhmmss);
+	if (flagBlink == 1) {
+		hhmmss[i + offset] = ' ';
+	}
+	if (i == 1) {
+		hhmmss[offset] = pro;
+	}
+	setear_string(hhmmss, 0);
 }
 
 void fCAMBIAR_HH(void) {
+	control_flagBlink();
+	blinkear(0);
 	if (i < 2) {
 		// return si es el primer numero y el numero no es valido
 		if ((i == 0) && (obtener_numero(2) == 0)) {
@@ -126,6 +148,8 @@ void fCAMBIAR_HH(void) {
 }
 
 void fCAMBIAR_MM(void) {
+	control_flagBlink();
+	blinkear(3);
 	if (i < 2) {
 		if ((i == 0) && (obtener_numero(5) == 0)) {
 			pro = key;
@@ -146,6 +170,8 @@ void fCAMBIAR_MM(void) {
 }
 
 void fCAMBIAR_SS(void) {
+	control_flagBlink();
+	blinkear(6);
 	if (i < 2) {
 		if ((i == 0) && (obtener_numero(5) == 0)) {
 			pro = key;

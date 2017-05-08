@@ -1,8 +1,8 @@
 #ifndef TIMEOUT_H_
 #define TIMEOUT_H_
 
-void start_timeout(char);
-char termino(void);
-void contar(void);
+void timeout_empezar(char);
+char timeout_termino(void);
+void timeout_contar(void);
 
 #endif /* TIMEOUT_H_ */
