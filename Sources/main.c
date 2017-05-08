@@ -10,14 +10,13 @@ extern "C"
 void MCU_init(void); /* Device initialization function declaration */
 
 void main(void) {
-	MCU_init();
-	MEF_init();
-	pantalla_init();
-
 	//inicializo el puerto B para el teclado
 	PTBDD = 0x0F;
 	PTBPE = 0xF0;
-
+	
+	MCU_init();
+	MEF_init();
+	pantalla_init();
 	for (;;) {
 		pantalla_update();
 	}

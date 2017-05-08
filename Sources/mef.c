@@ -8,8 +8,6 @@ typedef enum {
 } state;
 state estadoActual;
 
-#define CASO_NULO '~'
-
 char is_num(char);
 char construir_num(char, char);
 char obtener_numero(char);
@@ -112,16 +110,21 @@ void control_flagBlink() {
 
 void blinkear(char offset) {
 	get_time_as_str(hhmmss);
-	if (flagBlink == 1) {
+	if ((flagBlink == 1) && (i < 2)) {
 		hhmmss[i + offset] = ' ';
 	}
 	if (i == 1) {
 		hhmmss[offset] = pro;
 	}
+	if (i == 2) {
+		hhmmss[offset] = pro;
+		hhmmss[1+offset] = sdo;
+	}
 	setear_string(hhmmss, 0);
 }
 
 void fCAMBIAR_HH(void) {
+	setear_string("CAMBIANDO HORA", 1);
 	control_flagBlink();
 	blinkear(0);
 	if (i < 2) {
@@ -130,7 +133,7 @@ void fCAMBIAR_HH(void) {
 			pro = key;
 			return;
 		}
-		if ((pro == '2') && (obtener_numero(4) == 0))
+		if ((pro == '2') && (obtener_numero(3) == 0))
 			sdo = key;
 		else if ((pro != '2') && obtener_numero(9) == 0)
 			sdo = key;
@@ -148,6 +151,7 @@ void fCAMBIAR_HH(void) {
 }
 
 void fCAMBIAR_MM(void) {
+	setear_string("CAMBIANDO MIN", 1);
 	control_flagBlink();
 	blinkear(3);
 	if (i < 2) {
@@ -170,6 +174,7 @@ void fCAMBIAR_MM(void) {
 }
 
 void fCAMBIAR_SS(void) {
+	setear_string("CAMBIANDO SEG", 1);
 	control_flagBlink();
 	blinkear(6);
 	if (i < 2) {
