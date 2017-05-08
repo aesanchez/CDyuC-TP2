@@ -11,11 +11,14 @@ void timeout_contar(void) {
 // sec escalado en 0.1 segundos
 // ejemplo: si sec=5 -> son 0.5 segundos
 void timeout_empezar(char sec) {
-	if (timeoutAct != flag)
+	if (timeoutAct != flag){
 		return;
-
+	}
 	timeout_contador = 0;
 	timeoutAct = sec;
+}
+void timeout_reset(){
+	timeout_contador=0;
 }
 
 char timeout_termino(void) {

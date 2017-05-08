@@ -5,17 +5,17 @@
 char pantalla[2][STR_LEN + 1] = { { "                " },
 		{ "                " } };
 
-
 void setear_string(char str[], char fila) {
 	char length = strlen(str);
 	char offset = (STR_LEN - length) / 2;
 	char i;
 	//centra el string y completa la linea con espacios
 	for (i = 0; i < STR_LEN; i++) {
-		if((i<offset)||((length+offset)<=i))
-		pantalla[fila][i]=' ';
-		else
-		pantalla[fila][i]=str[i-offset];
+		if((i<offset)||((length+offset)<=i)) {
+			pantalla[fila][i]=' ';
+		} else {
+			pantalla[fila][i]=str[i-offset];
+		}
 	}
 }
 void pantalla_init(void) {
