@@ -2,17 +2,27 @@
 #include "eventotecla.h"
 #include "pantalla.h"
 #include "timeout.h"
+#include <string.h>
 
 typedef enum {
-	CERRADO, ABIERTO, DENEGADO, CAMBIAR_HH, CAMBIAR_MM, CAMBIAR_SS, CAMBIAR_C
+	CERRADO,
+	ABIERTO,
+	DENEGADO,
+	CAMBIAR_HH,
+	CAMBIAR_MM,
+	CAMBIAR_SS,
+	CAMBIAR_C,
+	INGRESAR_CLAVE
 } state;
 state estadoActual;
 
 #define CASO_NULO '~'
 
-char is_num(char);
+char leer_clave(void);
+char valido(char, char);
 char construir_num(char, char);
 char obtener_numero(char);
+char igualdad_strings(char[], char[]);
 
 void fCERRADO(void);
 void fABIERTO(void);
@@ -21,12 +31,14 @@ void fCAMBIAR_HH(void);
 void fCAMBIAR_MM(void);
 void fCAMBIAR_SS(void);
 void fCAMBIAR_C(void);
+void fINGRESAR_CLAVE(void);
 void (*MEF[])(void) = { fCERRADO, fABIERTO, fDENEGADO, fCAMBIAR_HH,
-		fCAMBIAR_MM, fCAMBIAR_SS, fCAMBIAR_C };
+		fCAMBIAR_MM, fCAMBIAR_SS, fCAMBIAR_C, fINGRESAR_CLAVE };
 
 char key;
-char claveActual[4] = {'1','2','3','4'};
-char claveLeida[4];
+char claveLongitud = 4;
+char claveActual[16] = { '1', '2', '3', '4' };
+char claveLeida[16];
 char hhmmss[9];
 
 void MEF_init(void) {
@@ -64,12 +76,9 @@ void fCERRADO(void) {
 		break;
 	case CASO_NULO:
 		break;
+		// entra a default cuando key es un numero
 	default:
-		//leer(claveN);
-		//if(claveActual==claveN)
-		//	estadoActual = ABIERTO;
-		//else
-		//	estadoActual = DENEGADO;
+		estadoActual = INGRESAR_CLAVE;
 		break;
 	}
 }
@@ -103,6 +112,9 @@ void fABIERTO(void) {
 	setear_string("ABIERTO", 1);
 	timeout_empezar(50);
 	if (timeout_termino() == 1) {
+		key = CASO_NULO;
+		// borrar basura
+		pop_tecla();
 		estadoActual = CERRADO;
 	}
 }
@@ -112,6 +124,9 @@ void fDENEGADO(void) {
 	setear_string("DENEGADO", 1);
 	timeout_empezar(20);
 	if (timeout_termino() == 1) {
+		key = CASO_NULO;
+		// borrar basura
+		pop_tecla();
 		estadoActual = CERRADO;
 	}
 }
@@ -206,22 +221,69 @@ void fCAMBIAR_SS(void) {
 }
 
 void fCAMBIAR_C(void) {
-
 }
-//void leer(char *clave){
-//	int i = 0;
-//	if (i < 5) {
-//			if ((i == 0)) {
-//				clave[i] = pop_tecla();
-//			}
-//			if (i == 1)
-//				clave[i] = pop_tecla();
-//			if ((i == 2)) {
-//				clave[i] = pop_tecla();
-//						}
-//			if (i == 3)
-//				clave[i] = pop_tecla();
-//			if (i == 4)
-//				clave[i] = pop_tecla(); 
-//	}	
-//}
+
+char igualdad_strings(char clavel[], char clavea[]) {
+	char k;
+	if (strlen(clavel) != strlen(clavea))
+		return 0;
+	for (k = 0; k < claveLongitud; k++) {
+		if(clavel[k]!=clavea[k])
+		return 0;
+	}
+	return 1;
+}
+
+char car = 0;
+char asteriscos[17] = "                ";
+void fINGRESAR_CLAVE(void) {
+	char j;
+	timeout_empezar(30);
+	if (timeout_termino() == 1) {
+		estadoActual = DENEGADO;
+		for (j = 0; j < 16; j++) {
+			asteriscos[j]=' ';
+		}
+		claveLeida[car] = '\0';
+		car = 0;
+		return;
+	}
+	get_time_as_str(hhmmss);
+	setear_string(hhmmss, 0);
+	for (j = 0; j < car; j++) {
+		asteriscos[j]='*';
+	}
+	setear_string(asteriscos, 1);
+
+	if (car == 0)
+		claveLeida[car++] = key;
+	if (leer_clave() == 1) {
+		for (j = 0; j < 16; j++) {
+			asteriscos[j]=' ';
+		}
+		claveLeida[car] = '\0';
+		car = 0;
+		if (igualdad_strings(claveLeida, claveActual) == 1) {
+			estadoActual = ABIERTO;
+		} else {
+			estadoActual = DENEGADO;
+		}
+		key = CASO_NULO;
+	}
+}
+
+char leer_clave(void) {
+	if (tecla_vacia() == 0) {
+		key = pop_tecla();
+		// pregunta si es numero y es menor que 9
+		timeout_reset();
+		if (key == 'D') {
+			return 1;
+		}
+		if (valido(key, 9) == 1) {
+			claveLeida[car++] = key;
+		}
+	}
+	return 0;
+}
+
