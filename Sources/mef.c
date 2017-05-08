@@ -13,6 +13,7 @@ state estadoActual;
 char is_num(char);
 char construir_num(char, char);
 char obtener_numero(char);
+
 void fCERRADO(void);
 void fABIERTO(void);
 void fDENEGADO(void);
@@ -22,9 +23,10 @@ void fCAMBIAR_SS(void);
 void fCAMBIAR_C(void);
 void (*MEF[])(void) = { fCERRADO, fABIERTO, fDENEGADO, fCAMBIAR_HH,
 		fCAMBIAR_MM, fCAMBIAR_SS, fCAMBIAR_C };
+
 char key;
-char claveActual[5] = "1234";
-char claveN[];
+char claveActual[4] = {'1','2','3','4'};
+char claveLeida[4];
 char hhmmss[9];
 
 void MEF_init(void) {
@@ -96,10 +98,22 @@ char obtener_numero(char max) {
 }
 
 void fABIERTO(void) {
+	get_time_as_str(hhmmss);
+	setear_string(hhmmss, 0);
 	setear_string("ABIERTO", 1);
+	timeout_empezar(50);
+	if (timeout_termino() == 1) {
+		estadoActual = CERRADO;
+	}
 }
 void fDENEGADO(void) {
+	get_time_as_str(hhmmss);
+	setear_string(hhmmss, 0);
 	setear_string("DENEGADO", 1);
+	timeout_empezar(20);
+	if (timeout_termino() == 1) {
+		estadoActual = CERRADO;
+	}
 }
 
 unsigned char flagBlink = 1;
