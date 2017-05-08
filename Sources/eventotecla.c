@@ -1,5 +1,5 @@
 #include "eventotecla.h"
-char tecla;
+char tecla=CASO_NULO;
 char vacio = 1;//vacio=1 --> TRUE
 
 void push_tecla(char t) {
