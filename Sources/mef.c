@@ -100,7 +100,7 @@ char obtener_numero(char max) {
 	key = pop_tecla();
 	if (valido(key, max) == 0)
 		return 1;
-	i++;
+	i = ++i % 2;
 	return 0;
 }
 
@@ -137,17 +137,19 @@ void control_flagBlink() {
 	}
 }
 
+char flagDosTeclas = 0;
 void blinkear(char offset) {
 	get_time_as_str(hhmmss);
-	if ((flagBlink == 1) && (i < 2)) {
-		hhmmss[i + offset] = ' ';
-	}
+
 	if (i == 1) {
 		hhmmss[offset] = pro;
 	}
-	if (i == 2) {
+	if (flagDosTeclas == 1) {
 		hhmmss[offset] = pro;
-		hhmmss[1+offset] = sdo;
+		hhmmss[1 + offset] = sdo;
+	}
+	if (flagBlink == 1) {
+		hhmmss[i + offset] = ' ';
 	}
 	setear_string(hhmmss, 0);
 }
@@ -156,22 +158,21 @@ void fCAMBIAR_HH(void) {
 	setear_string("CAMBIANDO HORA", 1);
 	control_flagBlink();
 	blinkear(0);
-	if (i < 2) {
-		// return si es el primer numero y el numero no es valido
-		if ((i == 0) && (obtener_numero(2) == 0)) {
-			pro = key;
-			return;
-		}
-		if ((pro == '2') && (obtener_numero(3) == 0))
-			sdo = key;
-		else if ((pro != '2') && obtener_numero(9) == 0)
-			sdo = key;
-	} else if (key != 'A') {
-		if (tecla_vacia() == 0)
-			key = pop_tecla();
+	// return si es el primer numero y el numero no es valido
+	if ((i == 0) && (obtener_numero(2) == 0)) {
+		pro = key;
+		return;
+	}
+	if ((pro == '2') && (obtener_numero(3) == 0)) {
+		sdo = key;
+		flagDosTeclas = 1;
+	} else if ((pro != '2') && obtener_numero(9) == 0) {
+		sdo = key;
+		flagDosTeclas = 1;
 	}
 
-	if ((i == 2) && (key == 'A')) {
+	if ((key == 'A') && (flagDosTeclas == 1)) {
+		flagDosTeclas = 0;
 		cambiar_hora(construir_num(pro, sdo), IGNORE_MM, IGNORE_SS);
 		estadoActual = CERRADO;
 		key = CASO_NULO;
