@@ -137,7 +137,7 @@ __interrupt void isrVrtc(void)
 			tick();
 			contador=0;
 	}
-	contar();
+	timeout_contar();
 	comprobar_tecla();
 	MEF_update();
 	RTCSC_RTIF=1;
