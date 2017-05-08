@@ -28,3 +28,8 @@ char timeout_termino(void) {
 	}
 	return 0;
 }
+
+void timeout_cerrar(void){
+	timeoutAct=flag;
+	
+}
