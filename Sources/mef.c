@@ -176,9 +176,10 @@ void fCAMBIAR_HH(void) {
 	if ((key == 'A') && (flagDosTeclas == 1)) {
 		flagDosTeclas = 0;
 		cambiar_hora(construir_num(pro, sdo), IGNORE_MM, IGNORE_SS);
-		estadoActual = CERRADO;
 		key = CASO_NULO;
 		i = 0;
+		timeout_cerrar();
+		estadoActual = CERRADO;
 	}
 }
 
@@ -197,9 +198,10 @@ void fCAMBIAR_MM(void) {
 	if ((flagDosTeclas == 1) && (key == 'B')) {
 		flagDosTeclas = 0;
 		cambiar_hora(IGNORE_HH, construir_num(pro, sdo), IGNORE_SS);
-		estadoActual = CERRADO;
+		timeout_cerrar();
 		key = CASO_NULO;
 		i = 0;
+		estadoActual = CERRADO;
 	}
 }
 
@@ -218,9 +220,10 @@ void fCAMBIAR_SS(void) {
 	if ((flagDosTeclas == 1) && (key == 'C')) {
 		flagDosTeclas = 0;
 		cambiar_hora(IGNORE_HH, IGNORE_MM, construir_num(pro, sdo));
-		estadoActual = CERRADO;
+		timeout_cerrar();
 		key = CASO_NULO;
 		i = 0;
+		estadoActual = CERRADO;
 	}
 }
 
@@ -249,6 +252,7 @@ void fCAMBIAR_C(void) {
 		}
 		claveLeida[car] = '\0';
 		car = 0;
+		timeout_cerrar();
 		if (igualdad_strings(claveLeida, claveActual) == 1) {
 			estadoActual = CLAVE_NUEVA;
 		} else {
@@ -267,7 +271,9 @@ void fCLAVE_NUEVA(void) {
 	}
 	setear_string(asteriscos, 1);
 	if (timeout_termino() == 1) {
+		key = CASO_NULO;
 		estadoActual = CERRADO;
+		car = 0;
 		return;
 	}
 	if (leer_clave() == 1) {
