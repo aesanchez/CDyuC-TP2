@@ -36,7 +36,6 @@ void (*MEF[])(void) = { fCERRADO, fABIERTO, fDENEGADO, fCAMBIAR_HH,
 		fCAMBIAR_MM, fCAMBIAR_SS, fCAMBIAR_C, fINGRESAR_CLAVE, fCLAVE_NUEVA };
 
 char key;
-char claveLongitud = 4;
 char claveActual[16] = { '1', '2', '3', '4' };
 char claveLeida[16];
 char hhmmss[9];
