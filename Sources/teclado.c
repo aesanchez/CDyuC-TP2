@@ -11,6 +11,11 @@ char teclaUlt = TECLA_VACIA;
 void columna_presionada(char *);
 void fila_presionada(char *, char);
 
+void teclado_init(void){
+	PTBDD = 0x0F;
+	PTBPE = 0xF0;	
+}
+
 void comprobar_tecla(void) {
 	char filaPresionada;
 	char columnaPresionada;

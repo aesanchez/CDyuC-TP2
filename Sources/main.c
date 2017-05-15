@@ -2,6 +2,7 @@
 #include "derivative.h" /* include peripheral declarations */
 #include "pantalla.h"
 #include "mef.h"
+#include "teclado.h"
 
 #ifdef __cplusplus
 extern "C"
@@ -10,11 +11,8 @@ extern "C"
 void MCU_init(void); /* Device initialization function declaration */
 
 void main(void) {
-	//inicializo el puerto B para el teclado
-	PTBDD = 0x0F;
-	PTBPE = 0xF0;
-	
 	MCU_init();
+	teclado_init();
 	MEF_init();
 	pantalla_init();
 	for (;;) {
