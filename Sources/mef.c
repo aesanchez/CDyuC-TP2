@@ -13,7 +13,8 @@ typedef enum {
 	CAMBIAR_SS,
 	CAMBIAR_C,
 	INGRESAR_CLAVE,
-	CLAVE_NUEVA
+	CLAVE_NUEVA,
+	FIN_NUEVA_CLAVE
 } state;
 state estadoActual;
 
@@ -32,8 +33,10 @@ void fCAMBIAR_SS(void);
 void fCAMBIAR_C(void);
 void fINGRESAR_CLAVE(void);
 void fCLAVE_NUEVA(void);
+void fFIN_NUEVA_CLAVE(void);
+
 void (*MEF[])(void) = { fCERRADO, fABIERTO, fDENEGADO, fCAMBIAR_HH,
-		fCAMBIAR_MM, fCAMBIAR_SS, fCAMBIAR_C, fINGRESAR_CLAVE, fCLAVE_NUEVA };
+		fCAMBIAR_MM, fCAMBIAR_SS, fCAMBIAR_C, fINGRESAR_CLAVE, fCLAVE_NUEVA, fFIN_NUEVA_CLAVE};
 
 char key;
 char claveActual[16] = { '1', '2', '3', '4' };
@@ -117,6 +120,20 @@ void fABIERTO(void) {
 		estadoActual = CERRADO;
 	}
 }
+
+void fFIN_NUEVA_CLAVE(void) {
+	get_time_as_str(hhmmss);
+	setear_string(hhmmss, 0);
+	setear_string("FIN NUEVA CLAVE", 1);
+	timeout_empezar(50);
+	if (timeout_termino() == 1) {
+		key = CASO_NULO;
+		// borrar basura
+		pop_tecla();
+		estadoActual = CERRADO;
+	}
+}
+
 void fDENEGADO(void) {
 	get_time_as_str(hhmmss);
 	setear_string(hhmmss, 0);
