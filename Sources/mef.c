@@ -262,18 +262,20 @@ void fCAMBIAR_C(void) {
 		asteriscos[j]='*';
 	}
 	setear_string(asteriscos, 1);
-	if (leer_clave() == 1) {
+	char aux = leer_clave();
+	if (aux > 0) {
 		for (j = 0; j < 16; j++) {
 			asteriscos[j]=' ';
 		}
-		claveLeida[car] = '\0';
 		car = 0;
 		timeout_cerrar();
-		if (igualdad_strings(claveLeida, claveActual) == 1) {
-			estadoActual = CLAVE_NUEVA;
-		} else {
-			estadoActual = DENEGADO;
-		}
+		if (aux == 1) {
+			if (igualdad_strings(claveLeida, claveActual) == 1) {
+				estadoActual = CLAVE_NUEVA;
+			} else {
+				estadoActual = DENEGADO;
+			}
+		}		
 		key = CASO_NULO;
 	}
 }
@@ -292,8 +294,11 @@ void fCLAVE_NUEVA(void) {
 		car = 0;
 		return;
 	}
-	if (leer_clave() == 1) {
-		strcpy(claveActual, claveLeida);
+	char aux = leer_clave();
+	if (aux > 0) {
+		if(aux == 1){
+			strcpy(claveActual, claveLeida);
+		}		
 		key = CASO_NULO;
 		car = 0;
 		timeout_cerrar();
@@ -335,22 +340,27 @@ void fINGRESAR_CLAVE(void) {
 	setear_string(asteriscos, 1);
 
 	if (car == 0)
-		claveLeida[car++] = key;
-	if (leer_clave() == 1) {
+		claveLeida[car++] = key;	
+	char aux = leer_clave();		
+	if (aux > 0) {
 		for (j = 0; j < 16; j++) {
 			asteriscos[j]=' ';
 		}
 		car = 0;
 		timeout_cerrar();
-		if (igualdad_strings(claveLeida, claveActual) == 1) {
-			estadoActual = ABIERTO;
-		} else {
-			estadoActual = DENEGADO;
-		}
+		if(aux == 1){
+			if (igualdad_strings(claveLeida, claveActual) == 1) {
+				estadoActual = ABIERTO;
+			} else {
+				estadoActual = DENEGADO;
+			}
+		}		
 		key = CASO_NULO;
 	}
 }
-
+// return: 0 si todavia no termino
+//         1 si termino correctamente la lectura de la clave
+//         2 si se cancelo la carga de la clave
 char leer_clave(void) {
 	if (car == 16) {
 		return 1;
@@ -362,6 +372,9 @@ char leer_clave(void) {
 		if (key == 'D') {
 			claveLeida[car] = '\0';
 			return 1;
+		}
+		if (key == '#') {
+			return 2;
 		}
 		if (valido(key, 9) == 1) {
 			claveLeida[car++] = key;
